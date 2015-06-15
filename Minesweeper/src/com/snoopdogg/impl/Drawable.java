@@ -1,0 +1,13 @@
+package com.snoopdogg.impl;
+
+import java.awt.Graphics2D;
+import java.awt.Point;
+import java.awt.image.BufferedImage;
+
+public interface Drawable {
+	
+	public abstract boolean onMatch(final Point pt);
+	
+	public abstract void draw(final BufferedImage g);
+
+}
