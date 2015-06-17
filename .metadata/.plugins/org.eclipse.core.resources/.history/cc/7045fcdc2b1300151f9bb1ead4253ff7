@@ -1,0 +1,91 @@
+package com.snoopdogg;
+
+/**
+ *  This file is part of Minesweeper.
+
+    Minesweeper is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Minesweeper is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+import java.awt.Color;
+import java.awt.Graphics2D;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.image.BufferedImage;
+
+import javax.swing.ImageIcon;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+
+import com.snoopdogg.impl.Cell;
+import com.snoopdogg.impl.Tile;
+
+public class Game {
+	
+	private BufferedImage canvas = null;
+	private Graphics2D g = null;
+	
+	public void initFrame(final Cell cell) {
+		canvas = new BufferedImage(cell.recommendedDimensions().width, cell.recommendedDimensions().height, BufferedImage.TYPE_INT_RGB);
+		g = canvas.createGraphics();
+		final JFrame frame = new JFrame("Minesweeper");
+		final JPanel panel = new JPanel();
+		final JLabel label = new JLabel(new ImageIcon(canvas));
+		frame.setSize(cell.recommendedDimensions());
+		panel.setSize(frame.getSize());
+		label.addMouseListener(new MouseListener() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				for(Tile t: cell.getGameTiles()) {
+					if(t.onMatch(e.getPoint())) {
+						t.draw(canvas);
+					}
+				}
+			}
+			@Override
+			public void mouseEntered(MouseEvent e) {
+			}
+			@Override
+			public void mouseExited(MouseEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+			@Override
+			public void mousePressed(MouseEvent e) {
+				for(Tile t: cell.getGameTiles()) {
+					if(t.onMatch(e.getPoint())) {
+						t.draw(canvas);
+					}
+				}
+			}
+			@Override
+			public void mouseReleased(MouseEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
+		panel.add(label);
+		frame.add(panel);
+		frame.pack();
+		frame.setVisible(true);
+		cell.drawCellBoundaries(canvas, g, Color.RED);
+		cell.createTiles();
+	}
+	
+	public static void main(String[] args) {
+		final Game game = new Game();
+		game.initFrame(new Cell(30,30,25,25));
+	}
+
+}

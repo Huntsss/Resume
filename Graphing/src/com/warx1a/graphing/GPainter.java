@@ -5,23 +5,21 @@ import java.awt.*;
 /**
  * Created by WJ001 on 6/14/15.
  */
-public abstract class GPainter<T extends GPaintUtils> implements Comparable<GPainter> {
+public abstract class GPainter<T extends GPainter<T>> implements Comparable<GPainter<T>> {
 
-    public final T utils;
     public final int x,y;
 
-    public GPainter(final T utils, final int x, final int y) {
-        this.utils = utils;
+    public GPainter(final int x, final int y) {
         this.x = x;
         this.y = y;
     }
 
     public abstract void draw(final Graphics2D g);
 
-    public void connectPoints(final Graphics2D g, final GPainter pt_1, final GPainter pt_2){};
+    public void connectPoints(final Graphics2D g, final GPainter<T> pt_1, final GPainter<T> pt_2){};
 
     @Override
-    public int compareTo(final GPainter pt) {
+    public int compareTo(final GPainter<T> pt) {
         if(pt.x < x) {
             return 1;
         } else if( pt.x > x) {
